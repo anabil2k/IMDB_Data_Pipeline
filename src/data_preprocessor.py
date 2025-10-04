@@ -54,24 +54,24 @@ class TextCleaner:
         text = re.sub(r'\s+', ' ', text).strip()
         
         # Tokenization (split into words)
-        words = text.split()
+       # words = text.split()
         
         # Remove stopwords and lemmatize
-        cleaned_words = [lemmatizer.lemmatize(word) for word in words if word not in stop_words and len(word) > 2]
+       # cleaned_words = [lemmatizer.lemmatize(word) for word in words if word not in stop_words and len(word) > 2]
         
         # Join the words back into a single string
-        cleaned_text = ' '.join(cleaned_words)
+       # cleaned_text = ' '.join(cleaned_words)
         
         
         # Update statistics
-        cleaned_len = len(cleaned_text)
+        cleaned_len = len(text)
         reduction = original_len - cleaned_len
         self.cleaning_stats.setdefault('total_reduction', 0)
         self.cleaning_stats['total_reduction'] += reduction
         self.cleaning_stats.setdefault('total_original_chars', 0)
         self.cleaning_stats['total_original_chars'] += original_len
         
-        return cleaned_text
+        return text
     
     def get_cleaning_stats(self):
         """Return cleaning statistics"""
