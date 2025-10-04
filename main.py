@@ -3,13 +3,27 @@
 Main script to run IMDB dataset preprocessing pipeline
 """
 
-import sys
 import os
+import sys
 
-# Add src directory to path
-sys.path.append('src')
+# Add the src directory to Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+src_path = os.path.join(current_dir, 'src')
+if src_path not in sys.path:
+    sys.path.insert(0, src_path)
 
-from src.data_preprocessor import IMDBPreprocessor
+try:
+    from data_preprocessor import IMDBPreprocessor
+    print("✓ Successfully imported IMDBPreprocessor")
+except ImportError as e:
+    print(f"❌ Import error: {e}")
+    print("Trying alternative import...")
+    # Try direct import
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("data_preprocessor", "src/data_preprocessor.py")
+    data_preprocessor = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(data_preprocessor)
+    IMDBPreprocessor = data_preprocessor.IMDBPreprocessor
 
 def main():
     """Main function to run the preprocessing pipeline"""
@@ -24,12 +38,21 @@ def main():
     
     try:
         # Initialize and run preprocessor
+        print("Initializing IMDB Preprocessor...")
         preprocessor = IMDBPreprocessor(data_path)
+        print("Starting full preprocessing pipeline...")
         preprocessor.run_full_pipeline()
+        
+        print("\n🎉 Pipeline completed successfully!")
+        print("📁 Check the following directories for outputs:")
+        print("   - cleaned_data/ : Cleaned datasets")
+        print("   - splits/       : Train/test splits") 
+        print("   - results/imdb/ : Charts and summary reports")
         
     except Exception as e:
         print(f"Error during preprocessing: {str(e)}")
-        raise
+        import traceback
+        traceback.print_exc()
 
 if __name__ == "__main__":
     main()
