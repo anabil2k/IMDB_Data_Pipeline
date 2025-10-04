@@ -10,20 +10,22 @@ import contractions
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize  # Import the tokenizer
 import warnings
 warnings.filterwarnings('ignore')
-
 # Download required NLTK data (run this once)
 nltk.download('stopwords')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
-
+nltk.download('punkt')       # For advanced tokenization
+nltk.download('punkt_tab')
 # Initialize lemmatizer and stopwords list
 lemmatizer = WordNetLemmatizer()
 stop_words = set(stopwords.words('english'))
 
 class TextCleaner:
     """Handles text cleaning operations"""
+
     
     def __init__(self):
         self.cleaning_stats = {}
@@ -35,11 +37,15 @@ class TextCleaner:
         if not isinstance(text, str):
             return ""
         
+        
+
+
         # Store original length for statistics
         original_len = len(text)
         
         # Convert to lowercase
         text = text.lower()
+        
 
         # Expand contractions using the contractions library
         text = contractions.fix(text)
@@ -49,17 +55,24 @@ class TextCleaner:
         
         # Remove URLs
         text = re.sub(r'http\S+|www\S+|https\S+', '', text, flags=re.MULTILINE)
-        
+
+        # Remove extra whitespace
+        text = re.sub(r'\s+', ' ', text).strip()
+
+
         # Remove emojis and special characters (keep only letters and basic punctuation)
         text = re.sub(r'[^a-zA-Z\s\.\,\!\?]', '', text)
         
-        # Remove extra whitespace
-        text = re.sub(r'\s+', ' ', text).strip()
         
-        # 6. Tokenization (split into words)
-        words = text.split()
+        # Tokenize using punkt (MUCH BETTER than split())
+        words = word_tokenize(text)
+
+        # Tokenization (split into words)
+        #print("\nTokenizing text...")
+        #words = text.split()
         
-        # 7. Remove stopwords and lemmatize
+
+        # Remove stopwords and lemmatize
         cleaned_words = [lemmatizer.lemmatize(word) for word in words if word not in stop_words and len(word) > 2]
         
         # 8. Join the words back into a single string
@@ -237,11 +250,21 @@ class IMDBPreprocessor:
         return label_counts, positive_pct, negative_pct
     
     def clean_text_data(self):
-        """Apply text cleaning to reviews"""
+        """Apply text cleaning to reviews as follows"""
         if self.df_clean is None:
             raise ValueError("Clean data not available. Call clean_data() first.")
         
         print("\n🔤 Cleaning text data...")
+        print(" \nCleaning steps include:")
+        print("\n 1. Convert to lowercase")
+        print("\n 2. Expand contractions")
+        print("\n 3. Remove HTML tags and URLs")
+        print("\n 4. Remove special characters and emojis")
+        print("\n 5. Normalize whitespaces")
+        print("\n 6. Tokenization using punkt (MUCH BETTER than split()): Split text into individual words or tokens.")
+        print("\n 7. Remove stopwords")
+        print("\n 8. Perform lemmatization\n")
+        print(" \nThis may take a while depending on dataset size. Please wait...")
         self.df_clean['clean_text'] = self.df_clean['review'].apply(self.text_cleaner.clean_text)
         
         # Show cleaning examples

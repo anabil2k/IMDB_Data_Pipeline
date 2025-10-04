@@ -146,7 +146,7 @@ IMDB-sentiment-preprocessing/
 - Remove HTML tags and URLs
 - Remove special characters and emojis
 - Normalize whitespaces
-- Tokenization: Split text into individual words or tokens.
+- Tokenization using punkt (MUCH BETTER than split()): Split text into individual words or tokens.
 - Remove Stop Words: Filter out common words (e.g., "the", "a", "is") that add little meaning.
 - Perform Lemmatization: Reduce words to their base or dictionary form (e.g., "running" -> "run", "better" -> "good").
 - **Output**: `clean_text` column with processed reviews
