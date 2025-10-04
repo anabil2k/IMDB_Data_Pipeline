@@ -1,0 +1,36 @@
+
+IMDB SENTIMENT ANALYSIS - PREPROCESSING SUMMARY
+===============================================
+
+DATASET OVERVIEW:
+• Original size: 50000 reviews
+• After cleaning: 49582 reviews
+• Removed: 418 rows (duplicates/missing values)
+
+LABEL DISTRIBUTION:
+• Positive reviews: 24884 (50.19%)
+• Negative reviews: 24698 (49.81%)
+• Dataset status: Balanced
+
+TRAIN/TEST SPLIT:
+• Train set: 39665 reviews
+• Test set: 9917 reviews
+• Stratification: Yes (maintains class distribution)
+
+PREPROCESSING STEPS COMPLETED:
+1.  Data loading and column standardization
+2.  Duplicate and missing value removal
+3.  Text cleaning (lowercase, HTML removal, special characters, etc.)
+4.  Label encoding (negative=0, positive=1)
+5.  Class balance analysis
+6.  Stratified train/test split (80/20)
+
+FILES GENERATED:
+• cleaned_data/imdb_cleaned.csv - Full cleaned dataset
+• splits/imdb_train.csv - Training set
+• splits/imdb_test.csv - Test set
+• results/imdb/label_distribution.png - Label distribution chart
+• results/imdb/class_balance.png - Class balance visualization
+
+DATASET IS BALANCED:
+No special handling needed for class imbalance.

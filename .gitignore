@@ -1,4 +1,2 @@
 *.csv
 __pycache__/
-*.py[codz]
-*$py.class
